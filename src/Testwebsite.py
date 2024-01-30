@@ -9,7 +9,17 @@ app = Flask(__name__)
 def home():
     return render_template("home.html")
 
+@app.route('/sales')
+def sales():
+    return render_template("sales.html", profits=profits)
 
+@app.route('/inventory')
+def inventory():
+    return render_template("inventory.html")
+
+@app.route('/order')
+def order():
+    return render_template("order.html")
 
 profits = 200
 

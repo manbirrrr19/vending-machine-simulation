@@ -1,0 +1,21 @@
+<html>
+    <head>
+        <link rel= "stylesheet" type= "text/css" href= "{{ url_for('static',filename='styles/mainpage.css') }}">
+             
+    </head>
+    <body>
+        <div class="topnav">
+            <a href="{{ url_for('home') }}">Home</a>
+            <a class="active" href="{{ url_for('sales') }}">Sales</a>
+            <a href="{{ url_for('inventory') }}">Inventory</a>
+            <a href="{{ url_for('order') }}">Order</a>
+        </div>     
+        <div>
+            <p>
+                Profits Earned = ${{profits}}
+            </p>
+            <iframe width="450" height="260" style="border: 1px solid #cccccc;" src="https://thingspeak.com/channels/2347853/charts/1?bgcolor=%23ffffff&color=%23d62020&dynamic=true&results=60&type=line&update=15"></iframe>
+
+        </div>
+    </body> 
+</html> 
