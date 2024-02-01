@@ -138,7 +138,18 @@ def check_drink():
     keyvalue = shared_keypad_queue.get()
     drink = {1: "coke", 2: "sprite",3:"fanta",4:"greentea",5:"pepsi",6:"milo"}.get(keyvalue)
     if drink:
-        return drink           
+        return drink      
+def servicing():
+    while True:
+        keyvalue = shared_keypad_queue.get()
+        if keyvalue==("#"):
+            for x in range(3):
+                buzzer.turn_on()
+                time.sleep(0.5)
+                buzzer.turn_off()
+                time.sleep(0.5)
+        time.sleep(0.3)
+
 
 app = Flask(__name__)
 
@@ -165,13 +176,20 @@ if __name__ == '__main__':
     Website_thread = threading.Thread(target=website_run)
     Main_menu_thread = threading.Thread(target=display_main_menu)
     keypad_thread = Thread(target=keypad.get_key)
-
+    #servicing_thread = Thread(target=servicing)
+    """
+    try to change to threading check for what button press i.e press 1 = dispense drink press # = servicing
+    so rpi doesnt die
+    max might be 5 thread but depends on delays
+    """
     Burglar_system_thread.start()
     Website_thread.start()
     Main_menu_thread.start()
     keypad_thread.start()   
+    #servicing_thread.start()
     while True:
         if check_drink():
             dispensing(check_drink()) 
+        
  
     
