@@ -12,11 +12,17 @@ from hal import hal_temp_humidity_sensor as temp_humid_sensor
 from hal import hal_usonic as usonic
 from hal import hal_dc_motor as dc_motor
 from hal import hal_accelerometer as accel
+from hal import dispensing
 import time
 led.init()
 adc.init()
 buzzer.init()
+# Define the callback function
+def key_press_cbk(key):
+    print(f'Key pressed: {key}')
 
+# Initialize the keypad
+keypad.init(key_press_cbk)
 moisture_sensor.init()
 input_switch.init()
 ir_sensor.init()
@@ -50,4 +56,31 @@ while True:
         # Wait for 5 seconds
         time.sleep(5)
 
- 
+def select():
+    # Check if there is a key press in the queue
+    if not shared_keypad_queue.empty():
+        # Get the key press from the queue
+        key_press = shared_keypad_queue.get()
+
+        # Map the key press to a drink
+        if key_press == '1':
+            selected_drink = 'coke'
+        elif key_press == '2':
+            selected_drink = 'sprite'
+        elif key_press == '3':
+            selected_drink = 'fanta'
+        elif key_press == '4':
+            selected_drink = 'greentea'
+        elif key_press == '5':
+            selected_drink = 'pepsi'
+        elif key_press == '6':
+            selected_drink = 'milo'
+        else:
+            return  # If the key press does not correspond to a drink, return without dispensing
+
+        # Call the dispensing function
+        dispensing(selected_drink)
+if __name__ == "__main__":
+    while True:
+        select()
+        time.sleep(0.1)  # Add a small delay to prevent the loop from running too fast       
