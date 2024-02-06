@@ -42,45 +42,47 @@ Pepsi = "6: Pepsi"
 drinks_top = [Coke, Sprite, Green_Tea]
 drinks_bottom = [Fanta, Milo, Pepsi]
 
-while True:
-    for i in range(len(drinks_top)):
-        # Clear the LCD
-        lcd_instance.lcd_clear()
 
-        # Display the drink from the top list
-        lcd_instance.lcd_display_string(drinks_top[i], 1)
 
-        # Display the drink from the bottom list
-        lcd_instance.lcd_display_string(drinks_bottom[i], 2)
+def display_drinks(drinks_top, drinks_bottom, lcd_instance):
+    while True:
+        for i in range(len(drinks_top)):
+            # Clear the LCD
+            lcd_instance.lcd_clear()
 
-        # Wait for 5 seconds
-        time.sleep(5)
+            # Display the drink from the top list
+            lcd_instance.lcd_display_string(drinks_top[i], 1)
+
+            # Display the drink from the bottom list
+            lcd_instance.lcd_display_string(drinks_bottom[i], 2)
+
+            # Wait for 5 seconds
+            time.sleep(5)
 
 def select():
     # Check if there is a key press in the queue
-    if not shared_keypad_queue.empty():
-        # Get the key press from the queue
-        key_press = shared_keypad_queue.get()
+    key_press = keypad.get_key()
+    
+    # Map the key press to a drink
+    if key_press == '1':
+        selected_drink = 'coke'
+    elif key_press == '2':
+        selected_drink = 'sprite'
+    elif key_press == '3':
+        selected_drink = 'fanta'
+    elif key_press == '4':
+        selected_drink = 'greentea'
+    elif key_press == '5':
+        selected_drink = 'pepsi'
+    elif key_press == '6':
+        selected_drink = 'milo'
+    else:
+        return  # If the key press does not correspond to a drink, return without dispensing
 
-        # Map the key press to a drink
-        if key_press == '1':
-            selected_drink = 'coke'
-        elif key_press == '2':
-            selected_drink = 'sprite'
-        elif key_press == '3':
-            selected_drink = 'fanta'
-        elif key_press == '4':
-            selected_drink = 'greentea'
-        elif key_press == '5':
-            selected_drink = 'pepsi'
-        elif key_press == '6':
-            selected_drink = 'milo'
-        else:
-            return  # If the key press does not correspond to a drink, return without dispensing
-
-        # Call the dispensing function
-        dispensing(selected_drink)
+    # Call the dispensing function
+    dispensing(selected_drink)
 if __name__ == "__main__":
     while True:
+        display_drinks(drinks_top, drinks_bottom, lcd_instance)
         select()
         time.sleep(0.1)  # Add a small delay to prevent the loop from running too fast       
