@@ -11,6 +11,7 @@ import json
 num_sales_generated = 0
 sales_file = 'sales_data.json'
 
+# Generate sales_data.json randomly as placeholder before implementation with real sales data from payment.py
 def load_sales_data():
     try:
         with open(sales_file, 'r') as f:
@@ -22,6 +23,7 @@ def save_sales_data(sales_data):
     with open(sales_file, 'w') as f:
         json.dump(sales_data, f)
 
+# Random generating sales
 def generate_sales_data(num_sales):
     global num_sales_generated
     sales_data = load_sales_data()  # Load existing sales data
@@ -59,8 +61,7 @@ def sales():
     num_sales = num_sales_generated
     sales_data = generate_sales_data(num_sales=num_sales)
 
-
-    # You can also fetch sales data from a database or API here
+    # Calculate profits 
     profits = round(calculate_profits(sales_data),2)
     return render_template('sales.html', profits=profits, sales_data=sales_data)
 
