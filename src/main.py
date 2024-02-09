@@ -63,9 +63,6 @@ def check_choice():
 
 def dispensing(drink):
     servo.init()
-    keypad.init(key_pressed)
-    keypad_thread = Thread(target=keypad.get_key)
-    keypad_thread.start()
     
     lcd = LCD.lcd()
     lcd.lcd_clear()
