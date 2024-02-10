@@ -230,4 +230,5 @@ if __name__ == "__main__":
     stock_of_pepsi = 1000
     stock_of_milo = 1000
     restock_choice = None
+    restocking_p1()
     
