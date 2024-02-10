@@ -110,12 +110,12 @@ def restock_p2():
     global stock_of_milo
     global restock_choice
 
-    stock_of_coke_str = str(stock_of_coke)
-    stock_of_sprite_str = str(stock_of_sprite)
-    stock_of_fanta_str = str(stock_of_fanta)
-    stock_of_greentea_str = str(stock_of_greentea)
-    stock_of_pepsi_str = str(stock_of_pepsi)
-    stock_of_milo_str = str(stock_of_milo)
+    global stock_of_coke_str
+    global stock_of_sprite_str
+    global stock_of_fanta_str
+    global stock_of_greentea_str
+    global stock_of_pepsi_str
+    global stock_of_milo_str
 
     added_stock = []
     global restock_choice
