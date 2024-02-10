@@ -12,7 +12,6 @@ from hal import hal_temp_humidity_sensor as temp_humid_sensor
 from hal import hal_usonic as usonic
 from hal import hal_dc_motor as dc_motor
 from hal import hal_accelerometer as accel
-from hal import dispensing
 import time
 led.init()
 adc.init()
@@ -29,7 +28,7 @@ ir_sensor.init()
 reader = rfid_reader.init()
 
 # Initialize the lcd class
-lcd_instance = LCD()
+lcd_instance = LCD.lcd()
 # Define each drink as a variable
 Coke = "1: Coke"
 Fanta = "2: Fanta"
