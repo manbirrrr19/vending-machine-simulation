@@ -1,7 +1,6 @@
 import time
 from threading import Thread
 import queue
-import threading
 
 from hal import hal_lcd as LCD
 from hal import hal_keypad as keypad
@@ -116,8 +115,9 @@ def restock_p2():
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
-            lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-            added_stock.append(added_stock)
+            else:
+                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
+                added_stock.append(added_stock)
     elif restock_choice == 2:
         lcd.lcd_display_string("Sprite stock: " + stock_of_sprite_str, 1)
         prev_keyvalue = keyvalue
@@ -125,8 +125,9 @@ def restock_p2():
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
-            lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-            added_stock.append(added_stock)
+            else:
+                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
+                added_stock.append(added_stock)
     elif restock_choice == 3:
         lcd.lcd_display_string("Fanta stock: " + stock_of_fanta_str, 1)
         prev_keyvalue = keyvalue
@@ -134,8 +135,9 @@ def restock_p2():
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
-            lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-            added_stock.append(added_stock)
+            else:
+                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
+                added_stock.append(added_stock)
     elif restock_choice == 4:
         lcd.lcd_display_string("GT stock: " + stock_of_greentea_str, 1)
         prev_keyvalue = keyvalue
@@ -143,8 +145,9 @@ def restock_p2():
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
-            lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-            added_stock.append(added_stock)
+            else:
+                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
+                added_stock.append(added_stock)
     elif restock_choice == 5:
         lcd.lcd_display_string("Pepsi stock: " + stock_of_pepsi_str, 1)
         prev_keyvalue = keyvalue
@@ -152,8 +155,9 @@ def restock_p2():
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
-            lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-            added_stock.append(added_stock)
+            else:
+                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
+                added_stock.append(added_stock)
     elif restock_choice == 6:
         lcd.lcd_display_string("Milo stock: " + stock_of_milo_str, 1)
         prev_keyvalue = keyvalue
@@ -161,8 +165,9 @@ def restock_p2():
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
-            lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-            added_stock.append(added_stock)
+            else:
+                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
+                added_stock.append(added_stock)
 
     lcd.lcd_clear()
     restocked_val = ''.join(map(int, added_stock))
@@ -212,7 +217,4 @@ if __name__ == "__main__":
     stock_of_pepsi = 1000
     stock_of_milo = 1000
     restock_choice = None
-    restocking_thread = threading.Thread(target=restocking_p1)
-    restocking_thread.start()
-
     
