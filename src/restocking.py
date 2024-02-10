@@ -29,6 +29,13 @@ def restocking_p1():
     global stock_of_pepsi
     global stock_of_milo
 
+    global stock_of_coke_str
+    global stock_of_sprite_str
+    global stock_of_fanta_str
+    global stock_of_greentea_str
+    global stock_of_pepsi_str
+    global stock_of_milo_str
+
     stock_of_coke_str = str(stock_of_coke)
     stock_of_sprite_str = str(stock_of_sprite)
     stock_of_fanta_str = str(stock_of_fanta)
@@ -45,36 +52,42 @@ def restocking_p1():
                 restock_choice = check_restocking_choice()
                 if restock_choice is not None:
                     restock_p2()
+                    break
                 time.sleep(1)
                 lcd.lcd_display_string("Restocking...", 1)
                 lcd.lcd_display_string("2.Sprite: ", stock_of_sprite_str, 2)
                 restock_choice = check_restocking_choice()
                 if restock_choice is not None:
                     restock_p2()
+                    break
                 time.sleep(1)
                 lcd.lcd_display_string("Restocking...", 1)
                 lcd.lcd_display_string("3.Fanta: ", stock_of_fanta_str, 2)
                 restock_choice = check_restocking_choice()
                 if restock_choice is not None:
                     restock_p2()
+                    break
                 time.sleep(1)
                 lcd.lcd_display_string("Restocking...", 1)
                 lcd.lcd_display_string("4.Green Tea: ", stock_of_greentea_str, 2)
                 restock_choice = check_restocking_choice()
                 if restock_choice is not None:
                     restock_p2()
+                    break
                 time.sleep(1)
                 lcd.lcd_display_string("Restocking...", 1)
                 lcd.lcd_display_string("5.Pepsi: ", stock_of_pepsi_str, 2)
                 restock_choice = check_restocking_choice()
                 if restock_choice is not None:
                     restock_p2()
+                    break
                 time.sleep(1)
                 lcd.lcd_display_string("Restocking...", 1)
                 lcd.lcd_display_string("6.Milo: ", stock_of_milo_str, 2)
                 restock_choice = check_restocking_choice()
                 if restock_choice is not None:
                     restock_p2()
+                    break
                 time.sleep(1)
 
 def check_restocking_choice():
