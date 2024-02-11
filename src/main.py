@@ -23,6 +23,8 @@ from hal import hal_usonic as usonic
 from hal import hal_dc_motor as dc_motor
 from hal import hal_accelerometer as accel
 from flask import Flask
+import threadingtest
+import burglar_system
 
 shared_keypad_queue = queue.Queue()
 def key_pressed(key):
@@ -50,6 +52,9 @@ Sprite = "3: Sprite"
 Milo = "4: Milo"
 Green_Tea = "5: Green Tea"
 Pepsi = "6: Pepsi"
+
+TELEGRAM_BOT_TOKEN = '6533036701:AAFLGg9h-M3Ba68HY3osZuO-dOV2eoLNuRA'
+CHAT_ID = '5271825143'
 
 # Group the drinks into top and bottom lists
 drinks_top = [Coke, Sprite, Green_Tea]
@@ -111,7 +116,7 @@ def display_drinks(drinks_top, drinks_bottom, lcd_instance):
 
 def main():
     global menu_status
-    burglar_alarm_thread = threading.Thread(target=threadingtest.Burglar_system)
+    burglar_alarm_thread = threading.Thread(target=burglar_system.Burglar_system)
     main_menu_thread = threading.Thread(target=display_drinks, args=(drinks_top,drinks_bottom,lcd_instance))
     website_thread = threading.Thread(target=threadingtest.website_run)
     keypad_thread = threading.Thread(target=threadingtest.keypad.get_key)

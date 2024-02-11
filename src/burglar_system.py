@@ -17,10 +17,13 @@ from hal import hal_usonic as usonic
 from hal import hal_dc_motor as dc_motor
 from hal import hal_accelerometer as accel
 from flask import Flask
+import requests
 
 accelerometer = accel.init()
 buzzer.init()
 
+TELEGRAM_BOT_TOKEN = '6533036701:AAFLGg9h-M3Ba68HY3osZuO-dOV2eoLNuRA'
+CHAT_ID = '5271825143'
 
 def alarm():
     for x in range(10):
@@ -29,7 +32,7 @@ def alarm():
         buzzer.turn_off()
         time.sleep(0.1)
 
-def main():
+def Burglar_system():
     while True:
         alarm_status = 0
         accelerometer.setTapDetection()
@@ -37,8 +40,12 @@ def main():
         print(alarm_status)
         if alarm_status == 2:
             alarm()
+            alert_message = "Alert! Your vending machine is being "
+            print(requests.get(f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage?chat_id={CHAT_ID}&text={alert_message}").json())
             alarm_status = 0
         time.sleep(0.5)
 
+
+
 if __name__ == '__main__':
-    main()
+    Burglar_system()
