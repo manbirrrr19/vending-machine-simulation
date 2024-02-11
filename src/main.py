@@ -25,6 +25,7 @@ from hal import hal_accelerometer as accel
 from flask import Flask
 import threadingtest
 import burglar_system
+import Testwebsite
 
 shared_keypad_queue = queue.Queue()
 def key_pressed(key):
@@ -118,7 +119,7 @@ def main():
     global menu_status
     burglar_alarm_thread = threading.Thread(target=burglar_system.Burglar_system)
     main_menu_thread = threading.Thread(target=display_drinks, args=(drinks_top,drinks_bottom,lcd_instance))
-    website_thread = threading.Thread(target=threadingtest.website_run)
+    website_thread = threading.Thread(target=Testwebsite.website_run)
     keypad_thread = threading.Thread(target=threadingtest.keypad.get_key)
     
     burglar_alarm_thread.start()
@@ -131,16 +132,21 @@ def main():
         drink = {1: "coke", 2: "sprite",3:"fanta",4:"greentea",5:"pepsi",6:"milo",} 
 
         if keyvalue in drink:
+            payment_success = 0
             lcd_instance.lcd_clear()
             menu_status = False
             drinks = drink[keyvalue] 
             rfid_id = payment.read_rfid()
+            payment.check_record(rfid_id)
             while payment.check_record(rfid_id) == 0:
                 rfid_id = payment.read_rfid()
                 if payment.check_record(rfid_id):
-                    payment.payment(rfid_id)
-                if payment.payment(rfid_id):
-                    payment.update_stock(drinks) 
+                    payment_success = payment.payment(rfid_id)
+                if payment_success == 1:
+                    Testwebsite.load_sales_data()
+                    Testwebsite.load_stock()
+                    selected_drink = Testwebsite.update_stock(keyvalue)
+                    Testwebsite.update_sales_data(selected_drink)
                     break
             dispensing(drinks)
             menu_status = True
