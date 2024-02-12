@@ -115,13 +115,41 @@ def display_drinks(drinks_top, drinks_bottom, lcd_instance):
             print("work")
             time.sleep(5)
 
+
+def check_password():
+    global timer_password
+    timer_password = 5
+    password = "1234"
+    lcd_instance.lcd_display_string("Enter PIN: ",1)
+    password_key = ""
+    global menu_status
+    
+    
+    for x in range (0,4):
+        print(x)
+        keyvalue = shared_keypad_queue.get()
+        if keyvalue:
+            lcd_instance.lcd_display_string(str(keyvalue),1,10+x)
+            password_key += (str(keyvalue))
+        
+    if password_key == password:
+        print("password works")
+        
+        menu_status = True
+    else:
+        print("password wrong")
+        menu_status = True
+        
+
 def main():
     global menu_status
     burglar_alarm_thread = threading.Thread(target=burglar_system.Burglar_system)
     main_menu_thread = threading.Thread(target=display_drinks, args=(drinks_top,drinks_bottom,lcd_instance))
     website_thread = threading.Thread(target=Testwebsite.website_run)
     keypad_thread = threading.Thread(target=threadingtest.keypad.get_key)
-    
+    timer_thread = threading.Thread(target=timer)
+
+    timer_thread.start()
     burglar_alarm_thread.start()
     keypad_thread.start()
     main_menu_thread.start()
@@ -135,6 +163,7 @@ def main():
             payment_success = 0
             lcd_instance.lcd_clear()
             menu_status = False
+            print(keyvalue)
             drinks = drink[keyvalue] 
             rfid_id = payment.read_rfid()
             payment.check_record(rfid_id)
@@ -154,7 +183,10 @@ def main():
         elif keyvalue == "#":
             print("hello")
             menu_status = False
-            print(menu_status)
+            lcd_instance.lcd_clear()
+            check_password()
+
+
             
 
 if __name__ == '__main__':
