@@ -27,12 +27,12 @@ def load_stock():
             return json.load(f)
     except FileNotFoundError:
         return {
-            "coke": 10,
-            "sprite": 10,
-            "fanta": 10,
-            "green_tea": 10,
-            "pepsi": 10,
-            "milo": 10
+            "Coke": 10,
+            "Sprite": 10,
+            "Fanta": 10,
+            "Green Tea": 10,
+            "Pepsi": 10,
+            "Milo": 10
         }
 
 # Save stock data to file
@@ -42,7 +42,7 @@ def save_stock(stock):
 
 # Update stock based on user selection
 def test_update_stock(): 
-    drinks = ["coke", "sprite", "fanta", "green_tea", "pepsi", "milo"]
+    drinks = ["Coke", "Sprite", "Fanta", "Green Tea", "Pepsi", "Milo"]
     while True:
         print ("1.Coke \n 2.Sprite \n 3.Fanta \n 4.Green Tea \n 5.Milo \n 6.Pepsi")
         choice = int(input("Enter choice: ")) - 1
@@ -58,7 +58,7 @@ def test_update_stock():
 
 def update_stock(choice):
     choice -= 1
-    drinks = ["coke", "sprite", "fanta", "green_tea", "pepsi", "milo"]
+    drinks = ["Coke", "Sprite", "Fanta", "Green Tea", "Pepsi", "Milo"]
     selected_drink = drinks[choice]
     stock = load_stock()
     if stock[selected_drink] == 0:
@@ -75,6 +75,15 @@ def update_sales_data(selected_drink):
     sale = {'id': len(sales_data), 'timestamp': str(timestamp), 'item': selected_drink, 'price': price}
     sales_data.append(sale)
     save_sales_data(sales_data)
+    
+# Calculate sales for each drink
+def calculate_sales_per_drink(sales_data):
+    sales_per_drink = {}
+    for sale in sales_data:
+        if sale['item'] not in sales_per_drink:
+            sales_per_drink[sale['item']] = 0
+        sales_per_drink[sale['item']] += sale['price']
+    return sales_per_drink
 
 # Calculate total profits from sales data
 def calculate_profits(sales_data):
@@ -82,7 +91,9 @@ def calculate_profits(sales_data):
 
 @app.route('/')
 def home():
-    return render_template("home.html")
+    sales_data = load_sales_data()
+    sales_per_drink = calculate_sales_per_drink(sales_data)
+    return render_template("home.html", sales_per_drink=sales_per_drink)
 
 @app.route('/inventory')
 def inventory():
@@ -91,9 +102,7 @@ def inventory():
     stock = load_stock()
     return render_template("inventory.html", stock=stock)
 
-@app.route('/order')
-def order():
-    return render_template("order.html")
+
 
 @app.route('/sales')
 def sales():
