@@ -1,6 +1,7 @@
 import time
 from threading import Thread
 import queue
+import Testwebsite
 
 from hal import hal_lcd as LCD
 from hal import hal_keypad as keypad
@@ -62,7 +63,7 @@ def restock_p2():
     global stock_of_greentea
     global stock_of_pepsi
     global stock_of_milo
-    
+    global stock
     global restock_choice
 
     added_stock = []
@@ -135,44 +136,57 @@ def restock_p2():
         stock_of_coke += int(restocked_val)
         lcd.lcd_display_string("Coke stock: ",1)
         lcd.lcd_display_string(str(stock_of_coke) ,2)
+        update_stock_2(restock_choice, stock_of_coke)
     elif restock_choice == 2:
         stock_of_sprite += int(restocked_val)
         lcd.lcd_display_string("Sprite stock: ",1)
         lcd.lcd_display_string(str(stock_of_sprite) ,2)
+        update_stock_2(restock_choice, stock_of_sprite)
     elif restock_choice == 3:
         stock_of_fanta += int(restocked_val)
         lcd.lcd_display_string("Fanta stock: ",1)
         lcd.lcd_display_string(str(stock_of_fanta) ,2)
+        update_stock_2(restock_choice, stock_of_fanta)
     elif restock_choice == 4:
         stock_of_greentea += int(restocked_val)
         lcd.lcd_display_string("GT stock: ",1)
         lcd.lcd_display_string(str(stock_of_greentea) ,2)
+        update_stock_2(restock_choice, stock_of_greentea)
     elif restock_choice == 5:
         stock_of_pepsi += int(restocked_val)
         lcd.lcd_display_string("Pepsi stock: ",1)
         lcd.lcd_display_string(str(stock_of_pepsi) ,2)
+        update_stock_2(restock_choice, stock_of_pepsi)
     elif restock_choice == 6:
         stock_of_milo += int(restocked_val)
         lcd.lcd_display_string("Milo stock: ",1)
         lcd.lcd_display_string(str(stock_of_milo) ,2)
-
+        update_stock_2(restock_choice, stock_of_milo)
+    
     time.sleep(3)
     lcd.lcd_clear()
     lcd.lcd_display_string("Restocking done.",1)
     time.sleep(3)
     lcd.lcd_clear() #go back to main
         
-
+def update_stock_2(choice,new_stock):
+    global stock
+    choice -= 1
+    drinks = ["Coke", "Sprite", "Fanta", "Green Tea", "Pepsi", "Milo"]
+    selected_drink = drinks[choice]
+    stock[selected_drink] = new_stock
+    Testwebsite.save_stock(stock)
 
 if __name__ == "__main__":
     keypad_thread = Thread(target=keypad.get_key)
     keypad_thread.start()
-    stock_of_coke = 100
-    stock_of_sprite = 100
-    stock_of_fanta = 100
-    stock_of_greentea = 100
-    stock_of_pepsi = 100
-    stock_of_milo = 100
+    stock = Testwebsite.load_stock()
+    Testwebsite.save_stock(stock)
+    stock_of_coke = stock["Coke"]
+    stock_of_sprite = stock["Sprite"]
+    stock_of_fanta = stock["Fanta"]
+    stock_of_greentea = stock["Green Tea"]
+    stock_of_pepsi = stock["Pepsi"]
+    stock_of_milo = stock["Milo"]
     restock_choice = None
     restocking_p1()
-    
