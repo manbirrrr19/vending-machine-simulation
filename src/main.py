@@ -26,6 +26,7 @@ from flask import Flask
 import threadingtest
 import burglar_system
 import Testwebsite
+import dispensing
 
 shared_keypad_queue = queue.Queue()
 def key_pressed(key):
@@ -67,31 +68,6 @@ def check_choice():
     if choice:
         return choice   
 
-def dispensing(drink):
-    servo.init()
-    
-    lcd = LCD.lcd()
-    lcd.lcd_clear()
-
-    drink_positions = {
-        "coke": 30,
-        "sprite": 60,
-        "fanta": 90,
-        "greentea": 120,
-        "pepsi": 150,
-        "milo": 180
-    }
-
-    position = drink_positions.get(drink)
-    if position is not None:
-        lcd.lcd_display_string("Dispensing", 1)
-        lcd.lcd_display_string(f"{drink.capitalize()}...", 2)
-        servo.set_servo_position(position)
-        time.sleep(3)
-        lcd.lcd_clear()
-        servo.set_servo_position(0)
-    else:
-        lcd.lcd_display_string("Invalid drink", 1)
 
 def display_drinks(drinks_top, drinks_bottom, lcd_instance):
     while True:
@@ -147,9 +123,7 @@ def main():
     main_menu_thread = threading.Thread(target=display_drinks, args=(drinks_top,drinks_bottom,lcd_instance))
     website_thread = threading.Thread(target=Testwebsite.website_run)
     keypad_thread = threading.Thread(target=threadingtest.keypad.get_key)
-    timer_thread = threading.Thread(target=timer)
-
-    timer_thread.start()
+    
     burglar_alarm_thread.start()
     keypad_thread.start()
     main_menu_thread.start()
@@ -177,7 +151,7 @@ def main():
                     selected_drink = Testwebsite.update_stock(keyvalue)
                     Testwebsite.update_sales_data(selected_drink)
                     break
-            dispensing(drinks)
+            dispensing.dispensing(drinks)
             menu_status = True
 
         elif keyvalue == "#":
