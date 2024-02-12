@@ -28,20 +28,39 @@ h1 {letter-spacing: 6px}
       <a href="{{ url_for('home') }}" class="w3-bar-item w3-button w3-light-grey">Home</a>
       <a href="{{ url_for('sales') }}" class="w3-bar-item w3-button">Sales</a>
       <a href="{{ url_for('inventory') }}" class="w3-bar-item w3-button">Inventory</a>
-      <a href="{{ url_for('order') }}" class="w3-bar-item w3-button">Reports</a>
     </div>
   </div>
 </header>
 
 <!-- Photo Grid -->
 <div class="w3-row-padding" style="margin-bottom:128px">
-  <div class="w3-col">
-    <img src="static/coke.jpg" style="width:20%">
-    <img src="static/sprite.jpg" style="width:20%">
-    <img src="static/fanta.jpg" style="width:20%">
-    <img src="static/greentea.jpg" style="width: 30%">
-    <img src="static/milo.jpg" style="width:20%">
-    <img src="static/pepsi.jpg" style="width:20%">
+  <div class="w3-row">
+    <div class="w3-col s4">
+      <p>Coke Sales: ${{ sales_per_drink['Coke']|default(0) }}</p>
+      <img src="static/coke.jpg" style="width:70%">
+    </div>
+    <div class="w3-col s4">
+      <p>Sprite Sales: ${{ sales_per_drink['Sprite']|default(0) }}</p>
+      <img src="static/sprite.png" style="width:70%">
+    </div>
+    <div class="w3-col s4">
+      <p>Fanta Sales: ${{ sales_per_drink['Fanta']|default(0) }}</p>
+      <img src="static/fanta.jpg" style="width:70%">
+    </div>
+  </div>  
+  <div class="w3-row">
+    <div class="w3-col s4">
+      <p>Green Tea Sales: ${{ sales_per_drink['Green tea']|default(0) }}</p>
+      <img src="static/greentea.jpg" style="width:70%">
+    </div>
+    <div class="w3-col s4">
+      <p>Milo Sales: ${{ sales_per_drink['Milo']|default(0) }}</p>
+      <img src="static/milo.jpg" style="width:70%">
+    </div>
+    <div class="w3-col s4">
+      <p>Pepsi Sales: ${{ sales_per_drink['Pepsi']|default(0) }}</p>
+      <img src="static/pepsi.jpg" style="width:70%">
+    </div>
   </div>
 </div>
   
