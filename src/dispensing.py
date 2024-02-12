@@ -14,54 +14,29 @@ def key_pressed(key):
 
 def dispensing(drink):
     servo.init()
-    keypad.init(key_pressed)
-    keypad_thread = Thread(target=keypad.get_key)
-    keypad_thread.start()
+    
     lcd = LCD.lcd()
     lcd.lcd_clear()
 
-    if drink == "coke":
-        lcd.lcd_display_string("Dispensing",1)
-        lcd.lcd_display_string("Coca-Cola...",2)
-        servo.set_servo_position(30)
+    drink_positions = {
+        "coke": 30,
+        "sprite": 60,
+        "fanta": 90,
+        "greentea": 120,
+        "pepsi": 150,
+        "milo": 180
+    }
+
+    position = drink_positions.get(drink)
+    if position is not None:
+        lcd.lcd_display_string("Dispensing", 1)
+        lcd.lcd_display_string(f"{drink.capitalize()}...", 2)
+        servo.set_servo_position(position)
         time.sleep(3)
         lcd.lcd_clear()
         servo.set_servo_position(0)
-    elif drink == "sprite":
-        lcd.lcd_display_string("Dispensing",1)
-        lcd.lcd_display_string("Sprite...",2)
-        servo.set_servo_position(60)
-        time.sleep(3)
-        lcd.lcd_clear()
-        servo.set_servo_position(0)
-    elif drink == "fanta":
-        lcd.lcd_display_string("Dispensing",1)
-        lcd.lcd_display_string("Fanta...",2)
-        servo.set_servo_position(90)
-        time.sleep(3)
-        lcd.lcd_clear()
-        servo.set_servo_position(0)
-    elif drink == "greentea":
-        lcd.lcd_display_string("Dispensing",1)
-        lcd.lcd_display_string("Green Tea...",2)
-        servo.set_servo_position(120)
-        time.sleep(3)
-        lcd.lcd_clear()
-        servo.set_servo_position(0)
-    elif drink == "pepsi":
-        lcd.lcd_display_string("Dispensing",1)
-        lcd.lcd_display_string("Pepsi...",2)
-        servo.set_servo_position(150)
-        time.sleep(3)
-        lcd.lcd_clear()
-        servo.set_servo_position(0)
-    elif drink == "milo":
-        lcd.lcd_display_string("Dispensing",1)
-        lcd.lcd_display_string("Milo...",2)
-        servo.set_servo_position(180)
-        time.sleep(3)
-        lcd.lcd_clear()
-        servo.set_servo_position(0)
+    else:
+        lcd.lcd_display_string("Invalid drink", 1)
 
 
 if __name__ == "__main__":
