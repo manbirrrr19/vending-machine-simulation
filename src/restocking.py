@@ -6,6 +6,14 @@ from hal import hal_lcd as LCD
 from hal import hal_keypad as keypad
 from hal import hal_servo as servo
 
+stock_of_coke = 1000
+stock_of_sprite = 1000
+stock_of_fanta = 1000
+stock_of_greentea = 1000
+stock_of_pepsi = 1000
+stock_of_milo = 1000
+restock_choice = None
+
 
 
 #Empty list to store sequence of keypad presses
@@ -14,9 +22,7 @@ def key_pressed(key):
     shared_keypad_queue.put(key)
 keypad.init(key_pressed)
 
-def key_pressed(key):
-    shared_keypad_queue.put(key)
-
+    
 def restocking_p1():
     servo.init()
     lcd = LCD.lcd()
@@ -29,72 +35,55 @@ def restocking_p1():
     global stock_of_pepsi
     global stock_of_milo
 
-    global stock_of_coke_str
-    global stock_of_sprite_str
-    global stock_of_fanta_str
-    global stock_of_greentea_str
-    global stock_of_pepsi_str
-    global stock_of_milo_str
 
-    stock_of_coke_str = str(stock_of_coke)
-    stock_of_sprite_str = str(stock_of_sprite)
-    stock_of_fanta_str = str(stock_of_fanta)
-    stock_of_greentea_str = str(stock_of_greentea)
-    stock_of_pepsi_str = str(stock_of_pepsi)
-    stock_of_milo_str = str(stock_of_milo)
+    global restock_choice
 
-    
     while True:
-        keyvalue= shared_keypad_queue.get() 
-        if keyvalue == '#':    #For YueHang to add to check for input 
-                lcd.lcd_display_string("Restocking...", 1)
-                lcd.lcd_display_string("1.Coke: ", stock_of_coke_str, 2)
-                restock_choice = check_restocking_choice()
-                if restock_choice is not None:
-                    restock_p2()
-                    break
-                time.sleep(1)
-                lcd.lcd_display_string("Restocking...", 1)
-                lcd.lcd_display_string("2.Sprite: ", stock_of_sprite_str, 2)
-                restock_choice = check_restocking_choice()
-                if restock_choice is not None:
-                    restock_p2()
-                    break
-                time.sleep(1)
-                lcd.lcd_display_string("Restocking...", 1)
-                lcd.lcd_display_string("3.Fanta: ", stock_of_fanta_str, 2)
-                restock_choice = check_restocking_choice()
-                if restock_choice is not None:
-                    restock_p2()
-                    break
-                time.sleep(1)
-                lcd.lcd_display_string("Restocking...", 1)
-                lcd.lcd_display_string("4.Green Tea: ", stock_of_greentea_str, 2)
-                restock_choice = check_restocking_choice()
-                if restock_choice is not None:
-                    restock_p2()
-                    break
-                time.sleep(1)
-                lcd.lcd_display_string("Restocking...", 1)
-                lcd.lcd_display_string("5.Pepsi: ", stock_of_pepsi_str, 2)
-                restock_choice = check_restocking_choice()
-                if restock_choice is not None:
-                    restock_p2()
-                    break
-                time.sleep(1)
-                lcd.lcd_display_string("Restocking...", 1)
-                lcd.lcd_display_string("6.Milo: ", stock_of_milo_str, 2)
-                restock_choice = check_restocking_choice()
-                if restock_choice is not None:
-                    restock_p2()
-                    break
-                time.sleep(1)
+            lcd.lcd_display_string("Restocking...", 1)
+            lcd.lcd_display_string("1.Coke: " + str(stock_of_coke), 2)
+            restock_choice = check_restocking_choice()
+
+            time.sleep(1)
+            lcd.lcd_clear()
+            lcd.lcd_display_string("Restocking...", 1)
+            lcd.lcd_display_string("2.Sprite: "+ str(stock_of_sprite), 2)
+            restock_choice = check_restocking_choice()
+
+            time.sleep(1)
+            lcd.lcd_clear()
+
+            lcd.lcd_display_string("Restocking...", 1)
+            lcd.lcd_display_string("3.Fanta: "+ str(stock_of_fanta), 2)
+            restock_choice = check_restocking_choice()
+
+            time.sleep(1)
+            lcd.lcd_clear()
+
+            lcd.lcd_display_string("Restocking...", 1)
+            lcd.lcd_display_string("4.Green Tea: "+ str(stock_of_greentea), 2)
+            restock_choice = check_restocking_choice()
+
+            time.sleep(1)
+            lcd.lcd_clear()
+
+            lcd.lcd_display_string("Restocking...", 1)
+            lcd.lcd_display_string("5.Pepsi: "+ str(stock_of_pepsi), 2)
+            restock_choice = check_restocking_choice()
+
+            time.sleep(1)
+            lcd.lcd_clear()
+
+            lcd.lcd_display_string("Restocking...", 1)
+            lcd.lcd_display_string("6.Milo: "+ str(stock_of_milo), 2)
+            restock_choice = check_restocking_choice()
+            time.sleep(1)
+            lcd.lcd_clear()
+
 
 def check_restocking_choice():
     keyvalue = shared_keypad_queue.get()
-    choice = {1: "coke", 2: "sprite",3:"fanta",4:"greentea",5:"pepsi",6:"milo",}.get(keyvalue)
-    if choice:
-        return choice   
+    if (keyvalue == 1 or keyvalue == 2 or keyvalue == 3 or keyvalue == 4 or keyvalue == 5 or keyvalue == 6):
+        return keyvalue
 
 def restock_p2():
      
@@ -108,112 +97,99 @@ def restock_p2():
     global stock_of_greentea
     global stock_of_pepsi
     global stock_of_milo
+    
     global restock_choice
-
-    global stock_of_coke_str
-    global stock_of_sprite_str
-    global stock_of_fanta_str
-    global stock_of_greentea_str
-    global stock_of_pepsi_str
-    global stock_of_milo_str
 
     added_stock = []
-    global restock_choice
 
     
     if restock_choice == 1:
-        lcd.lcd_display_string("Coke stock: " + stock_of_coke_str, 1)
-        prev_keyvalue = keyvalue
+        lcd.lcd_display_string("Coke stock: " + str(stock_of_coke), 1)
         for i in range(10):
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
             else:
-                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-                added_stock.append(added_stock)
+                lcd.lcd_display_string("Add: ", 2)
+                lcd.lcd_display_string(str(keyvalue),2,i+5)
+                added_stock.append(keyvalue)
     elif restock_choice == 2:
-        lcd.lcd_display_string("Sprite stock: " + stock_of_sprite_str, 1)
-        prev_keyvalue = keyvalue
+        lcd.lcd_display_string("Sprite stock: " + str(stock_of_sprite), 1)
         for i in range(10):
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
             else:
-                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-                added_stock.append(added_stock)
+                lcd.lcd_display_string("Add: ", 2)
+                lcd.lcd_display_string(str(keyvalue),2,i+5)
+                added_stock.append(keyvalue)
     elif restock_choice == 3:
-        lcd.lcd_display_string("Fanta stock: " + stock_of_fanta_str, 1)
-        prev_keyvalue = keyvalue
+        lcd.lcd_display_string("Fanta stock: " + str(stock_of_fanta_str), 1)
         for i in range(10):
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
             else:
-                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-                added_stock.append(added_stock)
+                lcd.lcd_display_string("Add: ", 2)
+                lcd.lcd_display_string(str(keyvalue),2,i+5)
+                added_stock.append(keyvalue)
     elif restock_choice == 4:
-        lcd.lcd_display_string("GT stock: " + stock_of_greentea_str, 1)
-        prev_keyvalue = keyvalue
+        lcd.lcd_display_string("GT stock: " + str(stock_of_greentea_str), 1)
         for i in range(10):
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
             else:
-                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-                added_stock.append(added_stock)
+                lcd.lcd_display_string("Add: ", 2)
+                lcd.lcd_display_string(str(keyvalue),2,i+5)
+                added_stock.append(keyvalue)
     elif restock_choice == 5:
-        lcd.lcd_display_string("Pepsi stock: " + stock_of_pepsi_str, 1)
-        prev_keyvalue = keyvalue
+        lcd.lcd_display_string("Pepsi stock: " + str(stock_of_pepsi_str), 1)
         for i in range(10):
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
             else:
-                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-                added_stock.append(added_stock)
+                lcd.lcd_display_string("Add: ", 2)
+                lcd.lcd_display_string(str(keyvalue),2,i+5)
+                added_stock.append(keyvalue)
     elif restock_choice == 6:
-        lcd.lcd_display_string("Milo stock: " + stock_of_milo_str, 1)
-        prev_keyvalue = keyvalue
+        lcd.lcd_display_string("Milo stock: " + str(stock_of_milo_str), 1)
         for i in range(10):
             keyvalue= shared_keypad_queue.get()
             if keyvalue == '*':
                 break
             else:
-                lcd.lcd_display_string("Add: " + str(keyvalue), 2, i+5)
-                added_stock.append(added_stock)
+                lcd.lcd_display_string("Add: ", 2)
+                lcd.lcd_display_string(str(keyvalue),2,i+5)
+                added_stock.append(keyvalue)
 
     lcd.lcd_clear()
-    restocked_val = ''.join(map(int, added_stock))
-    if prev_keyvalue == 1:
+    restocked_val = int(''.join(added_stock)) if added_stock else 0
+    if restock_choice == 1:
         stock_of_coke += restocked_val
-        stock_of_coke_str = str(stock_of_coke)   
         lcd.lcd_display_string("Coke stock: ",1)
-        lcd.lcd_display_string(stock_of_coke_str ,2)
-    elif prev_keyvalue == 2:
+        lcd.lcd_display_string(str(stock_of_coke) ,2)
+    elif restock_choice == 2:
         stock_of_sprite += restocked_val
-        stock_of_sprite_str = str(stock_of_sprite)
         lcd.lcd_display_string("Sprite stock: ",1)
-        lcd.lcd_display_string(stock_of_sprite_str ,2)
-    elif prev_keyvalue == 3:
+        lcd.lcd_display_string(str(stock_of_sprite) ,2)
+    elif restock_choice == 3:
         stock_of_fanta += restocked_val
-        stock_of_fanta_str = str(stock_of_fanta)
         lcd.lcd_display_string("Fanta stock: ",1)
-        lcd.lcd_display_string(stock_of_fanta_str ,2)
-    elif prev_keyvalue == 4:
+        lcd.lcd_display_string(str(stock_of_fanta) ,2)
+    elif restock_choice == 4:
         stock_of_greentea += restocked_val
-        stock_of_greentea_str = str(stock_of_greentea)
         lcd.lcd_display_string("Green Tea stock: ",1)
-        lcd.lcd_display_string(stock_of_greentea_str ,2)
-    elif prev_keyvalue == 5:
+        lcd.lcd_display_string(str(stock_of_greentea) ,2)
+    elif restock_choice == 5:
         stock_of_pepsi += restocked_val
-        stock_of_pepsi_str = str(stock_of_pepsi)
         lcd.lcd_display_string("Pepsi stock: ",1)
-        lcd.lcd_display_string(stock_of_pepsi_str ,2)
-    elif prev_keyvalue == 6:
+        lcd.lcd_display_string(str(stock_of_pepsi) ,2)
+    elif restock_choice == 6:
         stock_of_milo += restocked_val
-        stock_of_milo_str = str(stock_of_milo)
         lcd.lcd_display_string("Milo stock: ",1)
-        lcd.lcd_display_string(stock_of_milo_str ,2)
+        lcd.lcd_display_string(str(stock_of_milo) ,2)
 
         time.sleep(3)
         lcd.lcd_display_string("Restocking done.",1)
@@ -223,12 +199,14 @@ def restock_p2():
 
 
 if __name__ == "__main__":
-    stock_of_coke = 1000
-    stock_of_sprite = 1000
-    stock_of_fanta = 1000
-    stock_of_greentea = 1000
-    stock_of_pepsi = 1000
-    stock_of_milo = 1000
+    keypad_thread = Thread(target=keypad.get_key)
+    keypad_thread.start()
+    stock_of_coke = 10
+    stock_of_sprite = 10
+    stock_of_fanta = 10
+    stock_of_greentea = 10
+    stock_of_pepsi = 10
+    stock_of_milo = 10
     restock_choice = None
     restocking_p1()
     
