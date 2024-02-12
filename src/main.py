@@ -23,6 +23,10 @@ from hal import hal_usonic as usonic
 from hal import hal_dc_motor as dc_motor
 from hal import hal_accelerometer as accel
 from flask import Flask
+import threadingtest
+import burglar_system
+import Testwebsite
+import dispensing
 
 shared_keypad_queue = queue.Queue()
 def key_pressed(key):
@@ -51,6 +55,9 @@ Milo = "4: Milo"
 Green_Tea = "5: Green Tea"
 Pepsi = "6: Pepsi"
 
+TELEGRAM_BOT_TOKEN = '6533036701:AAFLGg9h-M3Ba68HY3osZuO-dOV2eoLNuRA'
+CHAT_ID = '5271825143'
+
 # Group the drinks into top and bottom lists
 drinks_top = [Coke, Sprite, Green_Tea]
 drinks_bottom = [Fanta, Milo, Pepsi]
@@ -61,31 +68,6 @@ def check_choice():
     if choice:
         return choice   
 
-def dispensing(drink):
-    servo.init()
-    
-    lcd = LCD.lcd()
-    lcd.lcd_clear()
-
-    drink_positions = {
-        "coke": 30,
-        "sprite": 60,
-        "fanta": 90,
-        "greentea": 120,
-        "pepsi": 150,
-        "milo": 180
-    }
-
-    position = drink_positions.get(drink)
-    if position is not None:
-        lcd.lcd_display_string("Dispensing", 1)
-        lcd.lcd_display_string(f"{drink.capitalize()}...", 2)
-        servo.set_servo_position(position)
-        time.sleep(3)
-        lcd.lcd_clear()
-        servo.set_servo_position(0)
-    else:
-        lcd.lcd_display_string("Invalid drink", 1)
 
 def display_drinks(drinks_top, drinks_bottom, lcd_instance):
     while True:
@@ -109,11 +91,37 @@ def display_drinks(drinks_top, drinks_bottom, lcd_instance):
             print("work")
             time.sleep(5)
 
+
+def check_password():
+    global timer_password
+    timer_password = 5
+    password = "1234"
+    lcd_instance.lcd_display_string("Enter PIN: ",1)
+    password_key = ""
+    global menu_status
+    
+    
+    for x in range (0,4):
+        print(x)
+        keyvalue = shared_keypad_queue.get()
+        if keyvalue:
+            lcd_instance.lcd_display_string(str(keyvalue),1,10+x)
+            password_key += (str(keyvalue))
+        
+    if password_key == password:
+        print("password works")
+        
+        menu_status = True
+    else:
+        print("password wrong")
+        menu_status = True
+        
+
 def main():
     global menu_status
-    burglar_alarm_thread = threading.Thread(target=threadingtest.Burglar_system)
+    burglar_alarm_thread = threading.Thread(target=burglar_system.Burglar_system)
     main_menu_thread = threading.Thread(target=display_drinks, args=(drinks_top,drinks_bottom,lcd_instance))
-    website_thread = threading.Thread(target=threadingtest.website_run)
+    website_thread = threading.Thread(target=Testwebsite.website_run)
     keypad_thread = threading.Thread(target=threadingtest.keypad.get_key)
     
     burglar_alarm_thread.start()
@@ -126,24 +134,33 @@ def main():
         drink = {1: "coke", 2: "sprite",3:"fanta",4:"greentea",5:"pepsi",6:"milo",} 
 
         if keyvalue in drink:
+            payment_success = 0
             lcd_instance.lcd_clear()
             menu_status = False
+            print(keyvalue)
             drinks = drink[keyvalue] 
             rfid_id = payment.read_rfid()
+            payment.check_record(rfid_id)
             while payment.check_record(rfid_id) == 0:
                 rfid_id = payment.read_rfid()
                 if payment.check_record(rfid_id):
-                    payment.payment(rfid_id)
-                if payment.payment(rfid_id):
-                    payment.update_stock(drinks) 
+                    payment_success = payment.payment(rfid_id)
+                if payment_success == 1:
+                    Testwebsite.load_sales_data()
+                    Testwebsite.load_stock()
+                    selected_drink = Testwebsite.update_stock(keyvalue)
+                    Testwebsite.update_sales_data(selected_drink)
                     break
-            dispensing(drinks)
+            dispensing.dispensing(drinks)
             menu_status = True
 
         elif keyvalue == "#":
             print("hello")
             menu_status = False
-            print(menu_status)
+            lcd_instance.lcd_clear()
+            check_password()
+
+
             
 
 if __name__ == '__main__':
