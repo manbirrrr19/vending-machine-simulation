@@ -103,9 +103,11 @@ def check_password():
     for x in range (0,4):
         print(x)
         keyvalue = shared_keypad_queue.get()
-        if keyvalue:
+        if (keyvalue ==1 or keyvalue ==2 or keyvalue ==3 or keyvalue ==4 or keyvalue ==5 or keyvalue ==6 or keyvalue ==7 or keyvalue ==8 or keyvalue ==9 or keyvalue ==0):
             lcd_instance.lcd_display_string(str(keyvalue),1,10+x)
             password_key += (str(keyvalue))
+        elif (keyvalue == '#' or keyvalue == '*'):
+            continue
         
     if password_key == password:
         global stock_of_coke
@@ -163,11 +165,6 @@ def main():
             payment.check_record(rfid_id)
             while payment.check_record(rfid_id) == 0:
                 rfid_id = payment.read_rfid()
-                keyvalue = shared_keypad_queue.get()
-                if keyvalue == "#":
-                    lcd_instance.lcd_clear()
-                    menu_status = True
-                    break
                 if payment.check_record(rfid_id):
                     payment_success = payment.payment(rfid_id)
                 if payment_success == 1:
