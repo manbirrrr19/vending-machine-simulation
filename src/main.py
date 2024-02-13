@@ -3,8 +3,6 @@ from threading import Thread
 import threading
 import queue
 from flask import render_template
-
-import Main_menu as main_menu 
 import threading
 import payment
 
@@ -18,16 +16,11 @@ from hal import hal_input_switch as input_switch
 from hal import hal_ir_sensor as ir_sensor
 from hal import hal_rfid_reader as rfid_reader
 from hal import hal_servo as servo
-from hal import hal_temp_humidity_sensor as temp_humid_sensor
-from hal import hal_usonic as usonic
-from hal import hal_dc_motor as dc_motor
 from hal import hal_accelerometer as accel
 from flask import Flask
-import threadingtest
 import burglar_system
 import Testwebsite
 import dispensing
-import restocking
 
 shared_keypad_queue = queue.Queue()
 def key_pressed(key):
@@ -353,4 +346,4 @@ def update_stock_2(choice,new_stock):
             
 
 if __name__ == '__main__':
-    main
+    main()

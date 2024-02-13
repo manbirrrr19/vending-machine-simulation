@@ -40,7 +40,7 @@ def Burglar_system():
         #print(alarm_status)
         if alarm_status == 2:
             #alarm()
-            alert_message = "Alert! Your vending machine is being "
+            alert_message = "Alert! Your vending machine is being burglarized"
             print(requests.get(f"https://api.telegram.org/bot{TELEGRAM_BOT_TOKEN}/sendMessage?chat_id={CHAT_ID}&text={alert_message}").json())
             alarm_status = 0
         time.sleep(0.5)
