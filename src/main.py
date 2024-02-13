@@ -46,22 +46,26 @@ input_switch.init()
 ir_sensor.init()
 reader = rfid_reader.init()
 
+def key_pressed(key):
+    shared_keypad_queue.put(key)
+keypad.init(key_pressed)
+
 lcd_instance = LCD.lcd()
 menu_status = True
 
 Coke = "1: Coke"
-Fanta = "2: Fanta"
-Sprite = "3: Sprite"
-Milo = "4: Milo"
-Green_Tea = "5: Green Tea"
-Pepsi = "6: Pepsi"
+Sprite = "2: Sprite"
+Fanta = "3: Fanta"
+Green_Tea = "4: Green Tea"
+Pepsi = "5: Pepsi"
+Milo = "6: Milo"
 
 TELEGRAM_BOT_TOKEN = '6533036701:AAFLGg9h-M3Ba68HY3osZuO-dOV2eoLNuRA'
 CHAT_ID = '5271825143'
 
 # Group the drinks into top and bottom lists
-drinks_top = [Coke, Sprite, Green_Tea]
-drinks_bottom = [Fanta, Milo, Pepsi]
+drinks_top = [Coke, Fanta, Pepsi]
+drinks_bottom = [Sprite, Green_Tea, Milo]
 
 
 def check_choice():
@@ -130,15 +134,22 @@ def check_password():
         menu_status = True
     else:
         print("password wrong")
+        lcd_instance.lcd_clear()
+        lcd_instance.lcd_display_string("Wrong Pin!", 1)
+        lcd_instance.lcd_display_string("Pls Try Again", 2)
+        time.sleep(1)
+        lcd_instance.lcd_clear
         menu_status = True
-        
+
+    return password_key
 
 def main():
     global menu_status
+    keypad.init(key_pressed)
+    keypad_thread = Thread(target=keypad.get_key)
     burglar_alarm_thread = threading.Thread(target=burglar_system.Burglar_system)
     main_menu_thread = threading.Thread(target=display_drinks, args=(drinks_top,drinks_bottom,lcd_instance))
     website_thread = threading.Thread(target=Testwebsite.website_run)
-    keypad_thread = threading.Thread(target=threadingtest.keypad.get_key)
     
     burglar_alarm_thread.start()
     keypad_thread.start()
@@ -159,6 +170,11 @@ def main():
             payment.check_record(rfid_id)
             while payment.check_record(rfid_id) == 0:
                 rfid_id = payment.read_rfid()
+                keyvalue = shared_keypad_queue.get()
+                if keyvalue == "#":
+                    lcd_instance.lcd_clear()
+                    menu_status = True
+                    break
                 if payment.check_record(rfid_id):
                     payment_success = payment.payment(rfid_id)
                 if payment_success == 1:
@@ -187,7 +203,7 @@ def restocking_p1():
     global stock_of_greentea
     global stock_of_pepsi
     global stock_of_milo
-
+    global menu_status
 
     global restock_choice
 
@@ -200,7 +216,13 @@ def restocking_p1():
             restock_choice = keyvalue
             restock_p2()
             break
-
+        elif (keyvalue == "*"):
+            restock_choice = 0
+            lcd_instance.lcd_display_string("Abort Restock")
+            lcd_instance.lcd_clear()
+            menu_status = True
+            break
+    return restock_choice
 
 
 def restock_p2():
@@ -331,4 +353,4 @@ def update_stock_2(choice,new_stock):
             
 
 if __name__ == '__main__':
-    main()
+    main
