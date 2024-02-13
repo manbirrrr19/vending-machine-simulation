@@ -31,8 +31,8 @@ def load_stock():
             "Sprite": 10,
             "Fanta": 10,
             "Green Tea": 10,
-            "Pepsi": 10,
-            "Milo": 10
+            "Milo": 10,
+            "Pepsi": 10
         }
 
 # Save stock data to file
@@ -42,7 +42,7 @@ def save_stock(stock):
 
 # Update stock based on user selection
 def test_update_stock(): 
-    drinks = ["Coke", "Sprite", "Fanta", "Green Tea", "Pepsi", "Milo"]
+    drinks = ["Coke", "Sprite", "Fanta", "Green Tea", "Milo", "Pepsi"]
     while True:
         print ("1.Coke \n 2.Sprite \n 3.Fanta \n 4.Green Tea \n 5.Milo \n 6.Pepsi")
         choice = int(input("Enter choice: ")) - 1
@@ -58,7 +58,7 @@ def test_update_stock():
 
 def update_stock(choice):
     choice -= 1
-    drinks = ["Coke", "Sprite", "Fanta", "Green Tea", "Pepsi", "Milo"]
+    drinks = ["Coke", "Sprite", "Fanta", "Green Tea", "Milo", "Pepsi"]
     selected_drink = drinks[choice]
     stock = load_stock()
     if stock[selected_drink] == 0:
@@ -97,8 +97,7 @@ def home():
 
 @app.route('/inventory')
 def inventory():
-    #selected_drink = test_update_stock()
-    #update_sales_data(selected_drink)
+    
     stock = load_stock()
     return render_template("inventory.html", stock=stock)
 
