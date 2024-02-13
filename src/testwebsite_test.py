@@ -30,20 +30,15 @@ def test_calculate_profits():
 
 
 def test_update_stock(mocker):
-    # Mock the stock data
-    mock_stock = {
-        "Coke": 10,
-        "Sprite": 10,
-        "Fanta": 10,
-        "Green Tea": 10,
-        "Milo": 10,
-        "Pepsi": 10
-    }
-
-    # Mock the input, load_stock, and save_stock functions
+    # Arrange
     mocker.patch('builtins.input', return_value='1')
-    mocker.patch('Testwebsite.load_stock', return_value=mock_stock)
+    mock_load_stock = mocker.patch('Testwebsite.load_stock', return_value={"Coke": 10, "Sprite": 10, "Fanta": 10, "Green Tea": 10, "Milo": 10, "Pepsi": 10})
     mock_save_stock = mocker.patch('Testwebsite.save_stock')
 
-    # Call the function to test
-    selected_drink = tw.test_update_stock()
+    # Act
+    result = tw.test_update_stock()
+
+    # Assert
+    mock_load_stock.assert_called_once()
+    mock_save_stock.assert_called_once_with({"Coke": 9, "Sprite": 10, "Fanta": 10, "Green Tea": 10, "Milo": 10, "Pepsi": 10})
+    assert result == "Coke"
