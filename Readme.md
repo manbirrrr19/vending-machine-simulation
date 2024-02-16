@@ -18,3 +18,13 @@ Our Smart Vending Machine which allows customers to purchase a drink physically 
 | Buzzer               | Used as an alarm when burglary is detected (attempt in forcefully opening the machine) | - If the vending machine detects that there has been an attempt to forcefully open it then the buzzer shall be activated                                                                                                                                                                     |                                                                                                           
 | Servo Motor          | Use to dispense drinks                                                                 | - The drinks vending machine shall allow customers to purchase drinks physically at the vending machine or remotely via their smartphones or an external website                                                                                                                             |
 | 3-Axis Accelerometer | Detects whether the machine is being forcefully opened                                 | - To avoid any theft of the drinks, the vending machine shall implement a burglar detection system to detect if the door of the vending machine has been forcefully pried open                                                                                                               |
+
+# How to set up
+Run the command <br>
+`
+docker pull druuuw/devopsgrp4:latest
+`
+Then run 
+`
+docker container run --privileged -dp 5000:5000 devopsgrp4
+`
