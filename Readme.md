@@ -22,9 +22,9 @@ Our Smart Vending Machine which allows customers to purchase a drink physically 
 # How to set up
 Run the command <br>
 `
-docker pull druuuw/devopsgrp4:latest
-`
-Then run 
+docker pull druuuw/devopsgrp4:latest 
+` <br>
+Then run <br>
 `
 docker container run --privileged -dp 5000:5000 devopsgrp4
 `
