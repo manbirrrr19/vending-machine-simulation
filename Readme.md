@@ -20,11 +20,13 @@ Our Smart Vending Machine which allows customers to purchase a drink physically 
 | 3-Axis Accelerometer | Detects whether the machine is being forcefully opened                                 | - To avoid any theft of the drinks, the vending machine shall implement a burglar detection system to detect if the door of the vending machine has been forcefully pried open                                                                                                               |
 
 # How to set up
-Run the command <br>
+Run the commands <br>
 `
 docker pull druuuw/devopsgrp4:latest 
 ` <br>
-Then run <br>
+followed by <br>
 `
-docker container run --privileged -dp 5000:5000 devopsgrp4
+docker container run --privileged -dp 5001:5001 devopsgrp4
 `
+# Video Demo
+[Link Here](https://youtu.be/IlhguRAQusw)
